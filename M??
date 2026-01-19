@@ -1,0 +1,80 @@
+-- اللاعب
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+-- إنشاء GUI
+local gui = Instance.new("ScreenGui")
+gui.Name = "SpeedGUI"
+gui.ResetOnSpawn = false
+gui.Parent = player:WaitForChild("PlayerGui")
+
+-- الخلفية
+local frame = Instance.new("Frame")
+frame.Parent = gui
+frame.Size = UDim2.new(0, 300, 0, 130)
+frame.Position = UDim2.new(0.5, -150, 0.78, 0)
+frame.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+frame.BorderSizePixel = 0
+
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 20)
+corner.Parent = frame
+
+local stroke = Instance.new("UIStroke")
+stroke.Thickness = 2
+stroke.Color = Color3.fromRGB(0, 170, 255)
+stroke.Parent = frame
+
+-- عنوان
+local title = Instance.new("TextLabel")
+title.Parent = frame
+title.Size = UDim2.new(1, -20, 0, 35)
+title.Position = UDim2.new(0, 10, 0, 8)
+title.Text = "⚡ Speed Control"
+title.Font = Enum.Font.GothamBold
+title.TextScaled = true
+title.BackgroundTransparency = 1
+title.TextColor3 = Color3.fromRGB(200, 220, 255)
+
+-- زر السرعة
+local button = Instance.new("TextButton")
+button.Parent = frame
+button.Size = UDim2.new(1, -40, 0, 55)
+button.Position = UDim2.new(0, 20, 0, 60)
+button.Text = "السرعة: OFF"
+button.Font = Enum.Font.GothamBold
+button.TextScaled = true
+button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+button.TextColor3 = Color3.fromRGB(255, 255, 255)
+button.BorderSizePixel = 0
+
+local btnCorner = Instance.new("UICorner")
+btnCorner.CornerRadius = UDim.new(0, 14)
+btnCorner.Parent = button
+
+-- إعداد السرعة
+local normalSpeed = 16
+local fastSpeed = 32
+local speedOn = false
+
+-- عند الضغط
+button.MouseButton1Click:Connect(function()
+	speedOn = not speedOn
+
+	if speedOn then
+		humanoid.WalkSpeed = fastSpeed
+		button.Text = "السرعة: ON"
+		button.BackgroundColor3 = Color3.fromRGB(0, 180, 0)
+	else
+		humanoid.WalkSpeed = normalSpeed
+		button.Text = "السرعة: OFF"
+		button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+	end
+end)
+
+-- لو اللاعب مات ورجع
+player.CharacterAdded:Connect(function(char)
+	character = char
+	humanoid = char:WaitForChild("Humanoid")
+end)
